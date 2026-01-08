@@ -6,135 +6,134 @@ const prisma = new PrismaClient()
 /**
  * Serviço responsável por todas as operações relacionadas à entidade "Book".
  */
-class BookService {
+class CopyService {
   /**
    * Retorna os dados de um livro específico pelo ID.
    * @param {string} id - ID do livro a ser buscado.
    */
-  async listBook(id) {
+  async listCopy(id) {
     try {
-      const book = await prisma.book.findUnique({ where: { book_id: id } })
+      const copy = await prisma.copy.findUnique({ where: { copy_id: id } })
 
-      if (book) {
+      if (copy) {
+
         return {
           type: "success",
-          message: "Listagem de livro bem-sucedida.",
+          message: "Listagem de cópia bem-sucedida.",
           data: {
-            id: book.id,
-            title: book.title,
-            isbn: book.isbn,
-            publication_year: book.publication_year,
-            publisher: book.publisher,
-            // author_id: book.author_id,
-            createdAt: book.createdAt,
-            updatedAt: book.updatedAt,
+            id: copy.id,
+            condition: copy.condition,
+            available: copy.available,
+            bar_code: copy.bar_code,
+            book_id: copy.book_id,
+            createdAt: copy.createdAt,
+            updatedAt: copy.updatedAt,
           },
         }
       } else {
         return {
           type: "error",
-          message: "Livro não existente.",
+          message: "Cópia não existente.",
         }
       }
     } catch (error) {
-      console.error("Erro ao listar livro:", error)
+      console.error("Erro ao listar cópia:", error)
       throw error
     }
   }
 
   /**
-   * Retorna todos os livros cadastrados.
+   * Retorna todas as cópias cadastradas.
    */
-  async listAllBooks() {
+  async listAllCopies() {
     try {
-      const books = await prisma.book.findMany()
+      const copies = await prisma.copy.findMany()
 
-      if (books.length) {
+      if (copies.length) {
         return {
           type: "success",
-          message: "Listagem de livros bem-sucedida.",
-          data: books,
+          message: "Listagem de cópias bem-sucedida.",
+          data: copies,
         }
       } else {
         return {
           type: "error",
-          message: "Nenhum livro encontrado.",
+          message: "Nenhuma cópia encontrada.",
         }
       }
     } catch (error) {
-      console.error("Erro ao listar livros:", error)
+      console.error("Erro ao listar cópias:", error)
       throw error
     }
   }
 
   /**
-   * Cria um novo livro no sistema.
+   * Cria um novo livro no sistema. verificar isso aq 
    * Valida e verifica duplicidade de isbn
    * @param {object} data - Objeto contendo título, isbn, data de publicaçaõ e publicador.
    */
-  async createBook(data) {
+  async createCopy(data) {
     try {
       
-      const existingBook = await prisma.book.findUnique({
-        where: { isbn: data.isbn },
+      const existingCopy = await prisma.copy.findUnique({
+        where: { bar_code: data.bar_code },
       })
 
-      if (existingBook) {
+      if (existingCopy) {
         return {
           type: "error",
-          message: "Esse ISBN já está cadastrado no sistema.",
+          message: "Essa cópia já está cadastrada no sistema.",
         }
       }
 
       
-      const newBook = await prisma.book.create({
+      const newCopy = await prisma.copy.create({
         data: {
-          isbn: data.isbn,
-          title: data.title,
-          publication_year: data.publication_year,
-          publisher: data.publisher,
-        //   author_id: data.author_id,
+          condition: data.condition,
+          available: data.available,
+          bar_code: data.bar_code,
+          book_id: data.book_id,
         },
       })
 
       return {
         type: "success",
-        message: "Livro criado com sucesso.",
-        data: newBook,
+        message: "Cópia criada com sucesso.",
+        data: newCopy,
       }
     } catch (error) {
-      console.error("Erro ao criar livro:", error)
+      console.error("Erro ao criar cópia:", error)
       throw error
     }
   }
 
   /**
-   * Deleta um livro do sistema com base no ID.
-   * @param {string} id - ID do livro a ser deletado.
+   * Deleta uma cópia do sistema com base no ID.
+   * @param {string} id - ID da cópia a ser deletada.
    */
-  async deleteBook(id) {
+  async deleteCopy(id) {
     try {
       const idNumber = Number(id);
       if (isNaN(idNumber)) {
         return { type: "error", message: "ID inválido." };
       }
 
-      const book = await prisma.book.findUnique({ where: { book_id: idNumber } })
+      const copy = await prisma.copy.findUnique({ where: { copy_id: idNumber } })
 
-      if (!book) {
+      if (!copy) {
         return {
           type: "error",
-          message: "Livro não encontrado para deletar.",
+          message: "Cópia não encontrada para deletar.",
         }
       }
 
-      await prisma.book.delete({ where: { book_id: idNumber } })
+      await prisma.copy.delete({ where: { copy_id: idNumber } })
       return {
         type: "success",
-        message: "Livro deletado com sucesso.",
+        message: "Cópia deletada com sucesso.",
       }
     } catch (error) {
-      console.error("Erro ao deletar livro:", error)
+      console.error("Erro ao deletar cópia:", error)
       throw error
     }
   }
@@ -146,54 +145,52 @@ class BookService {
    * @param {string} id - ID do usuário a ser atualizado.
    * @param {object} data - Dados a serem atualizados.
    */
-  async editBook(id, data) {
+  async editCopy(id, data) {
     try {
       const idNumber = Number(id);
       if (isNaN(idNumber)) {
         return { type: "error", message: "ID inválido." };
       }
-      const book = await prisma.book.findUnique({ where: { book_id: idNumber } })
+      const copy = await prisma.copy.findUnique({ where: { copy_id: idNumber } })
 
-      if (!book) {
+      if (!copy) {
         return {
           type: "error",
-          message: "Livro não encontrado para atualização.",
+          message: "Cópia não encontrada para atualização.",
         }
       }
 
       const updateData = {
-        title: data.title,
-        isbn: data.isbn,
-        publication_year: data.publication_year,
-        publisher: data.publisher,
-        // author_id: data.author_id,
+        condition: data.condition,
+        available: data.available,
+        bar_code: data.bar_code,
+        book_id: data.book_id,
       }
 
-      const updatedBook = await prisma.book.update({
-        where: { book_id: idNumber },
+      const updatedCopy = await prisma.copy.update({
+        where: { copy_id: idNumber },
         data: updateData,
       })
 
       return {
         type: "success",
-        message: "Livro atualizado com sucesso.",
+        message: "Cópia atualizada com sucesso.",
         data: {
-          id: updatedBook.id,
-          title: updatedBook.title,
-          isbn: updatedBook.isbn,
-          publication_year: updatedBook.publication_year,
-          publisher: updatedBook.publisher,
-        //   author_id: updatedBook.author_id,
-          createdAt: updatedBook.createdAt,
-          updatedAt: updatedBook.updatedAt,
+          id: updatedCopy.id,
+          condition: updatedCopy.condition,
+          available: updatedCopy.available,
+          bar_code: updatedCopy.bar_code,
+          book_id: updatedCopy.book_id,
+          createdAt: updatedCopy.createdAt,
+          updatedAt: updatedCopy.updatedAt,
         },
       }
     } catch (error) {
-      console.error("Erro ao editar livro:", error)
+      console.error("Erro ao editar cópia:", error)
       throw error
     }
   }
 }
 
 // Exporta a classe para ser utilizada pelos controladores
-module.exports = BookService
+module.exports = CopyService

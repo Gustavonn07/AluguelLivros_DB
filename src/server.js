@@ -32,6 +32,10 @@ const bookRoutes = require('./routes/BookRouter')
 
 app.use('/api/v1/books', bookRoutes)
 
+const copyRoutes = require('./routes/CopyRouter')
+
+app.use('/api/v1/copies', copyRoutes)
+
 /**
  * Configura o Express para confiar nos proxies (útil se estiver atrás de proxy reverso como Nginx).
  * Necessário em alguns casos para lidar corretamente com IPs e HTTPS.
