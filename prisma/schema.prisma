@@ -10,6 +10,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+
 /// Enumeração que define os tipos de perfis de usuário disponíveis no sistema.
 /// Pode ser usada como campo em modelos.
 enum Role {
@@ -30,10 +31,9 @@ model User {
 }
 
 model Client {
-  client_id Int      @id @default(autoincrement())
+  cpf       String   @id
   name      String
   email     String   @unique
-  cpf       String   @unique
   telephone String
   address   String
 
