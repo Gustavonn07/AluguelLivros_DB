@@ -96,7 +96,7 @@ npm run start:prod
   <tr>
     <td align=center> 
       <h3>Gustavo Nepomuceno</h3>
-      <p><em>554728</em></p>/>
+      <p><em>554728</em></p>
     </td>
     <td></td>
     <td align=center>
