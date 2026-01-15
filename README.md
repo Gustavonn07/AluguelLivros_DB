@@ -79,6 +79,12 @@ npm run start:prod
 ├── .env.example        # Modelo de .env
 └── README.md
 
+## MER e Arquivo sobre
+
+<img width="1249" height="550" alt="image" src="https://github.com/user-attachments/assets/d2fd0c2d-1303-4182-acdf-c7cc1e915044" />
+
+[Modelagem MER - Sistema de Aluguel de Livros 2025.2.pdf](https://github.com/user-attachments/files/24647086/Modelagem.MER.-.Sistema.de.Aluguel.de.Livros.2025.2.pdf)
+
 ## Participantes
 
 <table><tr>
