@@ -67,16 +67,27 @@ npm run start:prod
 
 ## 📂 Estrutura de Pastas
 ├── src
+<br/>
 │   ├── routes/         # Arquivos de rotas da API (ex: UserRouter.js)
+<br/>
 │   ├── services/       # Lógica de negócio (ex: UserService.js)
+<br/>
 │   ├── shared/         # Validações e utilitários compartilhados
+<br/>
 │   └── server.js       # Configuração principal do Express
+<br/>
 ├── prisma/
+<br/>
 │   └── schema.prisma   # Definição do modelo de banco de dados
+<br/>
 │   └── migrations      # Migrações em SQL para ajustar o banco de dados
+<br/>
 ├── index.js            # Arquivo de entrada principal
+<br/>
 ├── .env                # Variáveis de ambiente (não versionar)
+<br/>
 ├── .env.example        # Modelo de .env
+<br/>
 └── README.md
 
 ## MER e Arquivo sobre
