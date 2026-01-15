@@ -1,33 +1,10 @@
-/// Define o cliente a ser gerado pelo Prisma (JavaScript/TypeScript)
 generator client {
   provider = "prisma-client-js"
 }
 
-/// Define a fonte de dados do Prisma, neste caso um banco de dados PostgreSQL.
-/// A URL de conexão vem da variável de ambiente `DATABASE_URL`.
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
-}
-
-
-/// Enumeração que define os tipos de perfis de usuário disponíveis no sistema.
-/// Pode ser usada como campo em modelos.
-enum Role {
-  ADMIN // Usuário com privilégios administrativos
-  USER  // Usuário comum
-}
-
-/// Modelo User — representa os usuários do sistema.
-/// Cada campo abaixo vira uma coluna na tabela `User` no banco de dados.
-model User {
-  id         String    @id @default(uuid())         // ID único gerado como UUID
-  role       Role      @default(USER)               // Cargo do usuário, padrão é USER
-  name       String    @db.VarChar(255)             // Nome do usuário, limitado a 255 caracteres
-  email      String    @unique                      // E-mail único no sistema
-  password   String    @db.VarChar(255)             // Senha criptografada, também limitada a 255
-  createdAt  DateTime  @default(now())              // Data de criação, preenchida automaticamente
-  updatedAt  DateTime  @updatedAt                   // Atualiza automaticamente na modificação
 }
 
 model Client {
@@ -37,69 +14,68 @@ model Client {
   telephone String
   address   String
 
-  rentals   Rental[]          
+  rentals   Rental[]
 
-  createdAt  DateTime  @default(now())              
-  updatedAt  DateTime  @updatedAt    
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Author {
-  author_id    Int     @id @default(autoincrement())
-  name         String
-  nationality  String
-  birth_date   DateTime
+  id          Int      @id @default(autoincrement())
+  name        String
+  nationality String
+  birth_date  DateTime
 
-  // books        Book[]
+  books       Book[]
 
-  createdAt  DateTime  @default(now())              
-  updatedAt  DateTime  @updatedAt  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Book {
-  book_id Int     @id @default(autoincrement())
-  title   String
-  isbn    String  @unique @db.VarChar(13)  
+  id               Int     @id @default(autoincrement())
+  title            String
+  isbn             String  @unique @db.VarChar(13)
   publication_year Int
-  publisher       String
+  publisher        String
 
-  // author_id Int
-  // author    Author @relation(fields: [author_id], references: [author_id])
+  authorId Int?
+  author   Author? @relation(fields: [authorId], references: [id])
 
-  copies    Copy[]
-  
-  createdAt  DateTime  @default(now())              
-  updatedAt  DateTime  @updatedAt  
+  copies   Copy[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Copy {
-  copy_id            Int     @id @default(autoincrement())
-  condition          String
-  available          Boolean @default(true)
-  bar_code           String  @unique
+  id        Int     @id @default(autoincrement())
+  condition String
+  available Boolean @default(true)
+  bar_code  String  @unique
 
-  book_id Int
-  book    Book @relation(fields: [book_id], references: [book_id])
+  bookId Int
+  book   Book @relation(fields: [bookId], references: [id])
 
   rentals Rental[]
-  
-  createdAt  DateTime  @default(now())              
-  updatedAt  DateTime  @updatedAt  
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Rental {
-  rental_id              Int      @id @default(autoincrement())
-  rental_date            DateTime
-  due_date               DateTime
-  return_date            DateTime?
-  fine_value             Float?
+  id         Int      @id @default(autoincrement())
+  rental_date DateTime
+  due_date    DateTime
+  return_date DateTime?
+  fine_value  Float?
 
-  client_id Int
-  client    Client @relation(fields: [client_id], references: [client_id])
+  clientCpf String
+  client    Client @relation(fields: [clientCpf], references: [cpf])
 
-  copy_id Int
-  copy    Copy @relation(fields: [copy_id], references: [copy_id])
-  
-  createdAt  DateTime  @default(now())              
-  updatedAt  DateTime  @updatedAt  
+  copyId Int
+  copy   Copy @relation(fields: [copyId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
-

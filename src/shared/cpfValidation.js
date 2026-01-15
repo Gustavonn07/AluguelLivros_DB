@@ -1,4 +1,4 @@
-export function validateCPF(cpf) {
+module.exports = function validateCPF(cpf) {
   cpf = cpf.replace(/\D/g, '');
 
   if (cpf.length !== 11) return false;

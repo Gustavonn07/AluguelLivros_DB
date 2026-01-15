@@ -14,12 +14,12 @@ app.use(cors({
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
-const userRoutes = require('./routes/UserRouter')
+// const userRoutes = require('./routes/UserRouter')
 const bookRoutes = require('./routes/BookRouter')
 const copyRoutes = require('./routes/CopyRouter')
-const clientRoutes = require('./routes/cliente.routes.js') 
+const clientRoutes = require('./routes/ClientRouter') 
 
-app.use('/api/v1/users', userRoutes)
+// app.use('/api/v1/users', userRoutes)
 app.use('/api/v1/books', bookRoutes)
 app.use('/api/v1/copies', copyRoutes)
 app.use('/api/v1/clients', clientRoutes)

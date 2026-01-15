@@ -13,7 +13,7 @@ class CopyService {
    */
   async listCopy(id) {
     try {
-      const copy = await prisma.copy.findUnique({ where: { copy_id: id } })
+      const copy = await prisma.copy.findUnique({ where: { id: Number(id) } })
 
       if (copy) {
 
@@ -74,7 +74,17 @@ class CopyService {
    */
   async createCopy(data) {
     try {
-      
+      const bookExists = await prisma.book.findUnique({
+        where: { id: data.book_id },
+      })
+
+      if (!bookExists) {
+        return {
+          type: "error",
+          message: "Livro não encontrado. Não é possível criar a cópia.",
+        }
+      }
+
       const existingCopy = await prisma.copy.findUnique({
         where: { bar_code: data.bar_code },
       })
@@ -86,13 +96,16 @@ class CopyService {
         }
       }
 
-      
       const newCopy = await prisma.copy.create({
         data: {
           condition: data.condition,
-          available: data.available,
+          available: data.available ?? true,
           bar_code: data.bar_code,
-          book_id: data.book_id,
+          book: {
+            connect: {
+              id: data.book_id
+            }
+          }
         },
       })
 
@@ -107,6 +120,7 @@ class CopyService {
     }
   }
 
+
   /**
    * Deleta uma cópia do sistema com base no ID.
    * @param {string} id - ID da cópia a ser deletada.
@@ -118,7 +132,7 @@ class CopyService {
         return { type: "error", message: "ID inválido." };
       }
 
-      const copy = await prisma.copy.findUnique({ where: { copy_id: idNumber } })
+      const copy = await prisma.copy.findUnique({ where: { id: idNumber } })
 
       if (!copy) {
         return {
@@ -127,7 +141,7 @@ class CopyService {
         }
       }
 
-      await prisma.copy.delete({ where: { copy_id: idNumber } })
+      await prisma.copy.delete({ where: { id: idNumber } })
       return {
         type: "success",
         message: "Cópia deletada com sucesso.",
@@ -151,7 +165,7 @@ class CopyService {
       if (isNaN(idNumber)) {
         return { type: "error", message: "ID inválido." };
       }
-      const copy = await prisma.copy.findUnique({ where: { copy_id: idNumber } })
+      const copy = await prisma.copy.findUnique({ where: { id: idNumber } })
 
       if (!copy) {
         return {
@@ -168,7 +182,7 @@ class CopyService {
       }
 
       const updatedCopy = await prisma.copy.update({
-        where: { copy_id: idNumber },
+        where: { id: idNumber },
         data: updateData,
       })
 

@@ -13,28 +13,29 @@ class BookService {
    */
   async listBook(id) {
     try {
-      const book = await prisma.book.findUnique({ where: { book_id: id } })
+      const idNumber = Number(id)
+      if (isNaN(idNumber)) {
+        return { type: "error", message: "ID inválido." }
+      }
 
-      if (book) {
-        return {
-          type: "success",
-          message: "Listagem de livro bem-sucedida.",
-          data: {
-            id: book.id,
-            title: book.title,
-            isbn: book.isbn,
-            publication_year: book.publication_year,
-            publisher: book.publisher,
-            // author_id: book.author_id,
-            createdAt: book.createdAt,
-            updatedAt: book.updatedAt,
-          },
-        }
-      } else {
+      const book = await prisma.book.findUnique({
+        where: { id: idNumber },
+        include: {
+          copies: true,
+        },
+      })
+
+      if (!book) {
         return {
           type: "error",
           message: "Livro não existente.",
         }
+      }
+
+      return {
+        type: "success",
+        message: "Listagem de livro bem-sucedida.",
+        data: book,
       }
     } catch (error) {
       console.error("Erro ao listar livro:", error)
@@ -42,12 +43,17 @@ class BookService {
     }
   }
 
+
   /**
    * Retorna todos os livros cadastrados.
    */
   async listAllBooks() {
     try {
-      const books = await prisma.book.findMany()
+      const books = await prisma.book.findMany({
+        include: {
+          copies: true,
+        },
+      })
 
       if (books.length) {
         return {
@@ -66,6 +72,7 @@ class BookService {
       throw error
     }
   }
+
 
   /**
    * Cria um novo livro no sistema.
@@ -86,7 +93,6 @@ class BookService {
         }
       }
 
-      
       const newBook = await prisma.book.create({
         data: {
           isbn: data.isbn,
@@ -114,12 +120,14 @@ class BookService {
    */
   async deleteBook(id) {
     try {
-      const idNumber = Number(id);
+      const idNumber = Number(id)
       if (isNaN(idNumber)) {
-        return { type: "error", message: "ID inválido." };
+        return { type: "error", message: "ID inválido." }
       }
 
-      const book = await prisma.book.findUnique({ where: { book_id: idNumber } })
+      const book = await prisma.book.findUnique({
+        where: { id: idNumber },
+      })
 
       if (!book) {
         return {
@@ -128,7 +136,10 @@ class BookService {
         }
       }
 
-      await prisma.book.delete({ where: { book_id: idNumber } })
+      await prisma.book.delete({
+        where: { id: idNumber },
+      })
+
       return {
         type: "success",
         message: "Livro deletado com sucesso.",
@@ -148,11 +159,14 @@ class BookService {
    */
   async editBook(id, data) {
     try {
-      const idNumber = Number(id);
+      const idNumber = Number(id)
       if (isNaN(idNumber)) {
-        return { type: "error", message: "ID inválido." };
+        return { type: "error", message: "ID inválido." }
       }
-      const book = await prisma.book.findUnique({ where: { book_id: idNumber } })
+
+      const book = await prisma.book.findUnique({
+        where: { id: idNumber },
+      })
 
       if (!book) {
         return {
@@ -161,32 +175,20 @@ class BookService {
         }
       }
 
-      const updateData = {
-        title: data.title,
-        isbn: data.isbn,
-        publication_year: data.publication_year,
-        publisher: data.publisher,
-        // author_id: data.author_id,
-      }
-
       const updatedBook = await prisma.book.update({
-        where: { book_id: idNumber },
-        data: updateData,
+        where: { id: idNumber },
+        data: {
+          title: data.title,
+          isbn: data.isbn,
+          publication_year: data.publication_year,
+          publisher: data.publisher,
+        },
       })
 
       return {
         type: "success",
         message: "Livro atualizado com sucesso.",
-        data: {
-          id: updatedBook.id,
-          title: updatedBook.title,
-          isbn: updatedBook.isbn,
-          publication_year: updatedBook.publication_year,
-          publisher: updatedBook.publisher,
-        //   author_id: updatedBook.author_id,
-          createdAt: updatedBook.createdAt,
-          updatedAt: updatedBook.updatedAt,
-        },
+        data: updatedBook,
       }
     } catch (error) {
       console.error("Erro ao editar livro:", error)

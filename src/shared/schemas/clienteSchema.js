@@ -1,7 +1,7 @@
-import * as yup from 'yup'
-import { validateCPF } from '../shared/cpfValidation.js';
+const yup = require('yup')
+const validateCPF = require('../cpfValidation.js')
 
-export const clienteSchema = yup.object({
+const clienteSchema = yup.object({
   name: yup
     .string()
     .required('Nome é obrigatório'),
@@ -13,6 +13,7 @@ export const clienteSchema = yup.object({
 
   cpf: yup
     .string()
+    .transform(value => value?.replace(/\D/g, ''))
     .required('CPF é obrigatório')
     .test(
       'cpf-valido',
@@ -28,3 +29,5 @@ export const clienteSchema = yup.object({
     .string()
     .required('Endereço é obrigatório'),
 })
+
+module.exports = clienteSchema
