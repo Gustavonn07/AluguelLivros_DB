@@ -1,4 +1,3 @@
-// Importa o serviço responsável pela lógica de negócios relacionada a usuários
 const BookService = require('../service/BookService.js')
 const bookService = new BookService()
 
@@ -49,9 +48,7 @@ module.exports = {
    * Deve retornar 200 se a atualização for bem-sucedida, ou 404 se o usuário não for encontrado.
    */
   async editBook(req, res) {
-    // const { title, isbn, publication_date, publisher, author_id } = req.body
     const { title, isbn, publication_year, publisher} = req.body
-    // const result = await bookService.editBook(req.params.id, { title, isbn, publication_date, publisher, author_id })
     const result = await bookService.editBook(req.params.id, { title, isbn, publication_year, publisher })
     res.status(result.type === 'success' ? 200 : 404).json(result)
   },

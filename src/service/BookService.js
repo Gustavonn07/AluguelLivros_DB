@@ -1,6 +1,4 @@
-// Importa o cliente Prisma ORM para interação com o banco de dados
 const { PrismaClient } = require("@prisma/client")
-// Instancia o cliente do Prisma
 const prisma = new PrismaClient()
 
 /**
@@ -192,5 +190,4 @@ class BookService {
   }
 }
 
-// Exporta a classe para ser utilizada pelos controladores
 module.exports = BookService

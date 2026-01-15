@@ -42,7 +42,6 @@ Crie um arquivo .env com base no .env.example:
 PORT=3000
 NODE_ENV=development
 DATABASE_URL=postgresql://usuario:senha@localhost:5432/nome_do_banco
-JWT_SECRET=sua_chave_secreta
 ```
 
 ### 4. Inicializar o banco de dados (PostgreSQL)
@@ -74,7 +73,45 @@ npm run start:prod
 │   └── server.js       # Configuração principal do Express
 ├── prisma/
 │   └── schema.prisma   # Definição do modelo de banco de dados
+│   └── migrations      # Migrações em SQL para ajustar o banco de dados
 ├── index.js            # Arquivo de entrada principal
 ├── .env                # Variáveis de ambiente (não versionar)
 ├── .env.example        # Modelo de .env
 └── README.md
+
+## Participantes
+
+<table><tr>
+    <td colspan=3>
+      <h1 align=center>Integrantes do grupo:</h1>
+    </td>
+  </tr>
+  <tr></tr>
+  <tr>
+    <td align=center> 
+      <h3>Gustavo Nepomuceno</h3>
+      <p><em>554728</em></p>
+      <br />
+    </td>
+    <td></td>
+    <td align=center>
+      <h3>Ana Letícia de Sousa</h3>
+      <p><em>555876</em></p>
+    </td>
+  </tr>
+  <tr></tr>
+  <tr>
+    <td align=center>
+      <h3>Samya Soares</h3>
+      <p><em>555126</em></p>
+    </td>
+    <td align=center> 
+      <h3>Lorenna Aguiar</h3>
+      <p><em>553958</em></p>
+    </td>
+    <td align=center>
+      <h3>Davi Lisboa</h3>
+      <p><em>553865</em></p>
+    </td>
+  </tr>
+</table>
